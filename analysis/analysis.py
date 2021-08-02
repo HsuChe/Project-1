@@ -16,6 +16,7 @@ def bar_graph(merged_academic,selection_column,indepent_var_label):
         instruction_df = instruction_df.loc[(instruction_df[f'{description}_zscore']<3) & (instruction_df[f'{description}_zscore']>-3)]
         x_values = instruction_df[indepent_var_label]
         y_values = instruction_df['Percent']
+        plt.figure(figsize=(4,4), dpi=300)
         plt.scatter(x_values,y_values)
         (slope, intercept, rvalue, pvalue, stderr) = stats.linregress(x_values, y_values)
         print(intercept)
@@ -29,5 +30,7 @@ def bar_graph(merged_academic,selection_column,indepent_var_label):
         print(f"The r-value is: {rvalue**2}")
         print(f"The intercept value is: {intercept}")
         print(f"The p-value is: {pvalue}")
+        plt.savefig(f'../images/{description}.jpg')
         plt.show()
+        
     
