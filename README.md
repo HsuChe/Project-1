@@ -15,11 +15,11 @@
 
 ![hero image](https://github.com/HsuChe/matplotlib_challenge/blob/a25ee9a2ca6e4f6dd4c99a6167490a08182b8bba/Images/mouse-1708347_1920.jpg)
 
-Graduating from high school can mean different things to different people as graduation criteria can often be different between schools and the standard can be opaque. The overall competitiveness of students graduating from Georgia district highschools can be standardized by their enrollment into college after graduation. 
+Graduating from high school can mean different things to different people as graduation criteria can often be different between schools and the standard can be opaque. The overall competitiveness of students graduating from Georgia district highschools can be standardized by their enrollment into college after graduation.
 
 We took graduation data and enrollment data from 2018 and calculated the percent of student enrolling to college after graduation. We will use that metric as the dependent variable and we will test various variables to see what is the best way to improve school performance.
 
-Features of the dataset:
+Features of the dependent variable dataset:
 
 * The dependent variable is cleaned and filtered base on the School District Code.
 * We will retain the following columns to be analyzed in the dataset.
@@ -28,243 +28,233 @@ Features of the dataset:
   * Postsecondary Institution: **Number of students that enrolled in post secondary institutions after graduation.**
   * Percent: **The percent of students that went to college after graduation (Dependent Variable)**
 * The dataset is in the csv file format with delimiter of comma.
-* Download the dataset [HERE](https://github.com/HsuChe/matplotlib_challenge/blob/a25ee9a2ca6e4f6dd4c99a6167490a08182b8bba/Pymaceuticals/data/Mouse_metadata.csv)
-* Download 1st half of Dataset click [HERE](https://github.com/HsuChe/matplotlib_challenge/blob/a25ee9a2ca6e4f6dd4c99a6167490a08182b8bba/Pymaceuticals/data/Study_results.csv)
+* Download the dependent variable dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/C11_FY2019_HS%20Graduates%202017_Enrolled%20in%20College%20in%2016%20Mos_Redacted%20(2).xlsx)
 
-The homework is interested generating a few specific items for the summary table for changes in tumor growth over various timepoints.
+Features of the independent variables datasets:
 
-<!-- GETTING STARTED -->
+* The independent variable is cleaned and filtered base on the School District Code.
+* For the independent variable datasets, we will have one column that provides the value for the independent variables and another providing the labels. These columns can vary drastically, but we will always be merging against school district code and these variables.
+* Download the dropout rate dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/7-12%20Dropout%20Rate-2018_DEC_10th_2018.csv)
+* Download the ACT performance dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/ACT-Score-Data.csv)
+* Download the EOC performance rate dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/EOC_2019_By_Grad_FEB_24_2020%20(1).csv)
+* Download the graduation rate dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/Graduation_Rate_2019_Dec2nd_2019%20(3).csv)
+* Download the revenues and expenditure dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/Revenues_and_Expenditures_2018_DEC_10th_2018.csv)
+* Download the SAT performance dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/SAT-score-data.csv)
+  *`<!-- GETTING STARTED -->`
 
-## Processing the csv and make it into a easier to use dataset.
+## Processing the dependent variable
 
-Import the dependencies for the dataset
+Isolate the data points that we are interested in.
 
 * For loop to add to list
+
   ```sh
-  import metplotlib.pyplot as plt
-  import pandas as pd
+  # load the excel into pandas
+  df_enrollment = pd.read_excel('../../raw_data/C11_FY2019_HS Graduates 2017_Enrolled in College in 16 Mos_Redacted (2).xlsx')
+  df_enrollment
+
+  # isolate the datapoints that we are interested in
+  all_school = df_enrollment.iloc[:,0:7].iloc[1:,]
+  # set new vlaues for columns
+  all_school.columns = all_school.iloc[0]
+  # remove the duplicate column names and reset the index
+  all_school = all_school.loc[2:,:].reset_index(drop = True)
+  ```
+* We are now ready to remove data from the various school codes. The first thing we need to do is to remove all the school codes that focuses on aggregating all the data.
+
+  ```sh
+  # create df for the individual school codes
+  school_district = all_school.loc[all_school['School Code'] != 'ALL']
+  school_district
+  ```
+* We can now isolate the performance metrics that we want to use.
+
+  ```sh
+  # identify the performance metrics that we want to use for analysis
+  performance_metrics = school_all[['School District Code','Total High School Graduates','Number of High School Graduates Enrolled in Postsecondary Institution']]
+  performance_metrics
+  ```
+* The next step is to remove the none integer data points which is TFS or to few students and NaN
+  ```sh
+  # drop all the rows where there are anhy value "TFS" in the cells
+  school_no_TFS = df.replace('TFS', np.nan).dropna()
+  school_no_TFS
+    ```
+
+* After that, we noticed that the last datapoint is an aggregation row for all the school districts, we removed the last row from the datapoint. 
+  ```sh
+  # reset the index for the dataframe
+  school_no_TFS = school_no_TFS.reset_index(drop=True)
+  # remove the aggregate School District Code data at the end of the dataset
+  school_no_TFS = school_no_TFS.iloc[:185]
+  school_no_TFS
+    ```
+
+### Creating a column for the dependent variable we want to test. 
+
+The next step is to generate the percentage of students that graduated that went to post secondary institution. 
+
+* Take the number of students that went on to post secondary institution and divide it by total graduates
+  ```sh
+  # create a column for the percentage of students that went to college after graduation
+  percent = (school_no_TFS['Postsecondary Institution'] / school_no_TFS['Graduates']*100).round(2)
+  school_no_TFS['Percent'] = percent
+  school_no_TFS
   ```
 
-After importing the dependencies, go ahead and merge the first and the second half the of the data.
+We now will graph the districts and see if there are any anomolies, we found out that there are charter school districts that are giving us weird results. We decided to remove them.
 
-* Merge the data
+The charter school districts have digits above 1000, so we removed all the rows with district IDs that are more than 3 digits long. 
+
+* we will reset the index after removing the charter school district codes.
   ```sh
-  mouse_metadata_path = "data/Mouse_metadata.csv"
-  study_results_path = "data/Study_results.csv"
-  mouse_metadata = pd.read_csv(mouse_metadata_path)
-  study_results = pd.read_csv(study_results_path)
-  mouse_metadata.head(),study_results.head()
-  merge_df = pd.merge(mouse_metadata,study_results, how = 'inner', on = 'Mouse ID')
+  # remove charter school district codes
+  school_no_TFS = school_no_TFS.loc[school_no_TFS['School District Code']<1000]
+
+  # sort the results from the schools by descending order based on Percent of college enrollment
+  school_sorted = school_no_TFS.sort_values('Percent', ascending = False)
   ```
 
-### finding specific information about mouse IDs to know how to clean the data.
+## Picking 100 random samples from the dataset. 
 
-We can begin analyzing various aspects of mouse ID. First we tried to find the exact number of unique mice in the dataset.
-The two most important information for this dataset is the timepoint.
-
-* See if there are any mouse with duplicate mouse ID and timepoint
-  ```sh
-  df.loc[df.duplicated(subset = ['Mouse ID', 'Timepoint'], keep='last')]
-  ```
-
-This will help us find out that specifically mouse ID g989 has duplicate mouse ID and timepoint.
-
-Next we will remove the specific mouse ID from the dataset
-
-* Removing the g989 Mouse ID
-  ```sh
-  df_989_drop = df.loc[df['Mouse ID'] != need_to_drop['Mouse ID'].unique()[0]]
-  df_989_drop.reset_index(drop = True)
-  len(df_989_drop['Mouse ID'].unique())
-  ```
-
-## Generating a DataFrame without the duplicates
-
-The next goal is to generate the dataframe without all the duplicated mouse ID and take the latest iteration of Timepoint from them.
-
-This dataset is ordered from least to greatest so we can keep the higher Timepoint by taking the last iteration of the duplicate.
+We wanted to random sample the data so we can have test data if we wish to build machine learning models in the future. The batch size we chose for this analysis is 100. 
 
 * Avearge change in profit and losses month to month.
   ```sh
-  df_dup_drop = df_989_drop.drop_duplicates('Mouse ID', keep = 'last')
-  df_dup_drop
+  # find 100 random samples of schools to analyze
+  import random
+  random_list = []
+  for index in range(school_sorted['School District Code'].count()):
+      random_list.append(random.randrange(school_sorted['School District Code'].count()))
+      
+  index_list = random_list[:100]
   ```
 
-## Generating Summary Statistics
+We can now export our cleaned dependent variable dataset. 
 
-The great increase and decrease is calculated by calculating the max and min of the change list and while referencing their index location to find the months that these changes happened.
+## Cleaning independent variable datasets
 
-* Generating the summary statistics the conventional way, by creating the DataFrame from scratch.
+We created a function that cleans the independent variable data based upon the column that we want to merge with, the column that lables the independent variable, and the column that has the values we want to test. 
+
+* FIrst thing is to remove all aggregate district codes. merge_column is the column name where school district codes are located. 
   ```sh
-  group_drug = df.groupby('Drug Regimen')
-  summary_mean = group_drug['Tumor Volume (mm3)'].mean().round(2)
-  summary_med = group_drug['Tumor Volume (mm3)'].median().round(2)
-  summary_var = group_drug['Tumor Volume (mm3)'].var().round(2)
-  summary_std = group_drug['Tumor Volume (mm3)'].std().round(2)
-  summary_sem = group_drug['Tumor Volume (mm3)'].sem().round(2)
-
-  summary_table = pd.DataFrame()
-  summary_table['Mean'] = summary_mean
-  summary_table['Med'] = summary_med
-  summary_table['Var'] = summary_var
-  summary_table['St Dev'] = summary_std
-  summary_table['St Err'] = summary_sem
+  # remove all rows that aggregates data from SCHOOL_DSTRCT_CD
+  dataframe = dataframe.loc[dataframe[merge_column] != 'ALL']
   ```
 
-Another way to generate the summary table is using the aggregate method.
+Next we will change the name of the merge column to "school district code" and also make sure that all the data in the series is a int.
 
-* Store Yearly Change and Yearly Percent Change to memory
+* use astype(int) to change the series to integers
   ```sh
-  summary_table = group_drug.agg({'Tumor Volume (mm3)':['mean','median','var','std','sem']})
-  summary_table.columns = ['Mean', 'Med', 'Var', 'St Dev', 'St Err']
-  summary_table
+  dataframe['School District Code'] = dataframe[merge_column].astype(int)
   ```
 
-## Generating Bar and Pie Chart
+Then we can isolate the columns that we want to keep the values of for testing against the dependent variable. In this case, the test_column consists of the list of column names we want to keep. 
 
-We for variables for each of the information we calculated before and map them into a string.
-
-* Create the bar chart showing the distribution of Regiment
-
+* the test columns are a list of columns that we want to keep.
   ```sh
-  drug_id = df_dup_drop.groupby('Drug Regimen')['Mouse ID'].count()
-  drug_id.plot.bar(color = 'green', figsize=(15,5))
-  plt.xlabel('Drug Regiment')
-  plt.ylabel('Mouse Count')
-  plt.title('Mouse Count vs Regiment')
-  plt.show()
-  ```
-* Creating the chart with plt instead of pandas
-
-  ```sh
-  gender_spread = df_dup_drop.groupby('Sex')['Mouse ID'].count()
-  gender_spread.plot.pie(figsize = (8,8),labels = ['Male','Female'],autopct='%1.1f%%', shadow = True, startangle = 90)
-  plt.xlabel('Mice Count')
-  plt.ylabel('Gender')
-  plt.title('Gender Mice Count')
-  plt.show()
+  dataframe = dataframe[test_column]
   ```
 
-```
+Next we drop the NaN from the dataset.
 
-* Creating the chart with plt instead of pandas
+* the test columns are a list of columns that we want to keep.
   ```sh
-  gender_spread = df_dup_drop.groupby('Sex')['Mouse ID'].count()
-  gender_spread.plot.pie(figsize = (8,8),labels = ['Male','Female'],autopct='%1.1f%%', shadow = True, startangle = 90)
-  plt.xlabel('Mice Count')
-  plt.ylabel('Gender')
-  plt.title('Gender Mice Count')
-  plt.show()
-```
-
-* Creating the chart with plt instead of pandas
-  ```sh
-  plt.figure(figsize = (8,8))
-  plt.pie(gender_spread, labels = gender_spread.index, autopct = "%1.1f%%", shadow= True, startangle = 90)
-  plt.xlabel('Mice Count')
-  plt.ylabel('Gender')
-  plt.title('Gender Mice Count')
-  plt.show()
-
+  clean_data = dataframe.dropna()
   ```
 
-```
+Lastly we sort the database by school district and the lables of the indenpendet variables that we want to test. 
 
-## Quartiles, Outliers, and Boxplots
-
-<br>
-<br>
-<br>
-
-We want a dataframe that has the tumor volume for the last iteration of timepoint. 
-
-* For loop to add to list
-```sh
-df_max_time = pd.DataFrame(df_dup_drop.groupby('Mouse ID')['Timepoint'].max()).reset_index()
-
-df_time = pd.merge(df_max_time,df_dup_drop,on=['Mouse ID','Timepoint'])]
-```
-
-After generating the csvlist, find the total number of votes being accounted for. To do this, we will find the index of the rows.
-
-* Function to find the box and whiskers graph and outliers
+* the average is what we are testing against the dependent variable. 
   ```sh
-  def boxplot_drugs(drug_list):
-    drug_df = pd.DataFrame()
-    for drugs in drug_list:
-        tumor_vol = df_time.loc[df_time['Drug Regimen'] == drugs]['Tumor Volume (mm3)']
-        drug_df[drugs] = tumor_vol.reset_index(drop=True)
-
-        # Calculate the IQR and quantitatively determine if there are any potential outliers. 
-
-        # Locate the rows which contain mice on each drug and get the tumor volumes
-        quartiles = tumor_vol.reset_index(drop=True).quantile([.25,.5,.75])
-        # add subset 
-        lowerq = quartiles[0.25]
-        upperq = quartiles[0.75]
-        iqr = upperq-lowerq
-        # Determine outliers using upper and lower bounds
-        lower_bound = quartiles[0.25] - (1.5*iqr)
-        upper_bound = quartiles[0.75] + (1.5*iqr)
-        print(f"Upper/Lower Bound: {drugs}")
-        print(f"Values below {lower_bound.round(2)} could be outliers.")
-        print(f"Values above {upper_bound.round(2)} could be outliers.")
-
-    return drug_df
-
-
-  drug_df = boxplot_drugs(drug_list)
+  clean_data.groupby(['School District Code',selection_column]).mean()
   ```
 
-## Line and Scatter Plots
+Now the independent variable data is cleaned. 
 
-To plot effectiveness for each regiment and its effect on the weight of the mouse.
+## Analysis and graphing the independent variable against the dependent variable. 
 
-* plotting a line graph for changes in tumor size over Time Point:
+To graph the data, we would need the following information: 
+1. the merged dataframe.
+2. labels for the independent variables.
+3. values for the independent variables.
+
+First we create a list of the labels for the independent variables. 
+
+* Use the .unique() to isolate the list of independent variables that we are testing.
+
   ```sh
-  mouse_name = df_time.loc[df_time['Drug Regimen'] == 'Capomulin']['Mouse ID'].iloc[0]
-  mouse_info = merge_df.loc[merge_df['Mouse ID'] == mouse_name][['Timepoint','Tumor Volume (mm3)']]
-  mouse_info.index = mouse_info['Timepoint']
-  mouse_info['Tumor Volume (mm3)'].plot.line(figsize = (10,6))
-  plt.xlabel('Time Point (Days)')
-  plt.ylabel('Tumor Size (mm^3)')
-  plt.title(f'My Mouse "{mouse_name}" Will Live')
+  description_list = merged_academic[selection_column].unique()
+  merged_academic.loc[:,:] = merged_academic.groupby(['School District Code',selection_column]).mean().reset_index()
   ```
 
-## Regression and Correlation
-
-Finding the information on the effectiveness of regimen against size.
-
-* Scatter plot for Timepoint against Tumor Size:
+Then we create a for loop for each lables and pulling the values. 
+* Be sure to use .drop_duplicates() to remove any duplicate data.
   ```sh
-  from scipy.stats import linregress
+  for description in description_list:
+    instruction_df = merged_academic.loc[(merged_academic[selection_column] == description)]
+    instruction_df.drop_duplicates()
+  ```
 
-  x_axis = mouse_vol_weight['Weight (g)']
-  y_axis = mouse_vol_weight['Tumor Volume (mm3)']
-  (slope, intercept, rvalue, pvalue, stderr) = linregress(x_axis, y_axis)
-  y_values = slope*x_axis+intercept
-  print(f"regression function: f(x) = {slope.round(2)}x + {intercept.round(2)}")
-  plt.figure(figsize=(10,7))
-  plt.plot(x_axis, y_values)
-  plt.scatter(x_axis, y_axis)
-  plt.xlabel('Weight (g)')
-  plt.ylabel('Tumor Size (mm^3)')
-  plt.title('Effect of Capomulin on Weight')
+Now we will find the z values for each value in the independent variable and we will remove all z values that are over -3 and 3 to remove outliers. 
+
+* z scores will be generated against other values in the independent variable column.
+  ```sh
+  z = (stats.zscore(instruction_df.loc[:,indepent_var_label]))
+  instruction_df.loc[:,(f'{description}_zscore')] = z
+  instruction_df = instruction_df.loc[(instruction_df[f'{description}_zscore']<3) & (instruction_df[f'{description}_zscore']>-3)]
+  ```
+
+we can now put the x and y values that we want to graph.
+
+* put in the values and generate linear regression variables.
+  ```sh
+  x_values = instruction_df[indepent_var_label]
+  y_values = instruction_df['Percent']
+  # fill out the information necessary for linear regression
+  (slope, intercept, rvalue, pvalue, stderr) = stats.linregress(x_values, y_values)
+  regress_values = x_values * slope + intercept
+  line_eq = "y = " + str(round(slope,2)) + "x +" + str(round(intercept,2))
+  ```
+
+put in the parameters for the graphs that we are generating.
+
+* put in the values and generate linear regression variables.
+  ```sh
+  plt.figure(figsize=(15,15), dpi=300)
+  plt.scatter(x_values,y_values)
+
+  plt.xlabel(f"{description}")
+  plt.ylabel('% of Graduates into College')
+  plt.title(f"{description} vs. Into College ")
+  plt.plot(x_values,regress_values,"r-")
+  plt.annotate(line_eq,(20,15),fontsize=15,color="red")
+  print(f"The r-value is: {rvalue**2}")
+  print(f"The intercept value is: {intercept}")
+  print(f"The p-value is: {pvalue}")
+  plt.savefig(f'../images/{description}.png',bbox_inches = 'tight')
   plt.show()
   ```
 
-## Conclusion
+We can now analyze the graphs and export the images. 
 
-### 1.
 
-#### The dataset has a nice spread in terms of giving an even amount of regiment to each mouse. There are no real statistical bias in terms of the distribution of regiments
 
-### 2.
+# Conclusion
 
-#### The dataset has a nice spread for gender of the mouse, there are no significant bias between the male and female population in the data.
+# 1.
 
-### 3.
+## Spend more funds on hiring qualified 9th grade teachers
 
-#### Based on the bar and whisker graph, the regiment Capomulin and Ramicane seems to be the more effective regiment as the tumor volume seems to be the lowest on the last time point. However, the drugs Infubinol and Ceftamin are more consistant as their outliers are closer to the lower and higher quantiles.
+# 2.
 
-#### Infubinol and Ceftamin should yield more consistant results and if those drugs are more effective past 45 time point, then they might be better drugs than Capomulin and Ramicane.
+## Emphasize importance of success in 9th grade courses
+
+# 3.
+
+## Implement specific programs to aid homeless students
+
+# 4.
+
+## Offer SAT/ACT prep to all students in schools
+
