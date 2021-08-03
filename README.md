@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 <h3 align="center">Git Cats</h3>
 
+=======
+<h3 align="center">Group Git Kats</h3>
+>>>>>>> 293677534aa8bd70b5a3de070bd7b643592a1884
 
 <p align="center">
      College Enrollment from High School
@@ -14,7 +18,7 @@
 
 ## About The Project
 
-![hero image](https://github.com/HsuChe/matplotlib_challenge/blob/a25ee9a2ca6e4f6dd4c99a6167490a08182b8bba/Images/mouse-1708347_1920.jpg)
+![hero image](https://github.com/HsuChe/Project-1/blob/c77948626aef175d2735c6d4783f35d59d35fd1d/image/graduation-995042_1920.jpg)
 
 Graduating from high school can mean different things to different people as graduation criteria can often be different between schools and the standard can be opaque. The overall competitiveness of students graduating from Georgia district highschools can be standardized by their enrollment into college after graduation.
 
@@ -41,7 +45,6 @@ Features of the independent variables datasets:
 * Download the graduation rate dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/Graduation_Rate_2019_Dec2nd_2019%20(3).csv)
 * Download the revenues and expenditure dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/Revenues_and_Expenditures_2018_DEC_10th_2018.csv)
 * Download the SAT performance dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/SAT-score-data.csv)
-  *`<!-- GETTING STARTED -->`
 
 ## Processing the dependent variable
 

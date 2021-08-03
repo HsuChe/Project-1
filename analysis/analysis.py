@@ -33,4 +33,31 @@ def bar_graph(merged_academic,selection_column,indepent_var_label):
         plt.savefig(f'../images/{description}.png',bbox_inches = 'tight')
         plt.show()
         
-    
+def analysis(df, ind_label,ind_value):
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    grouped = df.groupby(['School District Code', ind_label]).mean().reset_index()
+    ind_var_list = grouped[ind_label].unique()
+    for ind_var in ind_var_list:
+        ind_df = grouped.loc[grouped[ind_label] == ind_var]
+        if ind_df[ind_value].mean()==0:
+            continue
+        ind_df = ind_df.assign(z_score = stats.zscore(ind_df[ind_value]))
+        ind_df = ind_df.loc[(ind_df['z_score']<3) & (ind_df['z_score']>-3)]
+        x_values = ind_df[ind_value]
+        y_values = ind_df['Percent']
+        (slope, intercept, rvalue, pvalue, stderr) = stats.linregress(x_values, y_values)
+        regress_values = x_values * slope + intercept
+        print(f'regression function = f(x) = x*{slope.round(2)} + {intercept.round(2)}')
+        print(f'p-value: {pvalue}')
+        print(f'std error: {stderr}')
+        ind_df.plot.scatter(x = ind_value, y = 'Percent', figsize = (8,8))
+        plt.plot(x_values, regress_values, color = 'red')
+        plt.title(f'{ind_var} vs college enrollment')
+        plt.xlabel(ind_var)
+        plt.ylabel('College Enrollment Percentage')
+        ind_var = ind_var.replace("/", "&")
+        plt.savefig(f'../images/{ind_var}.png')
+        plt.show()
+                
