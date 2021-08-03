@@ -13,7 +13,7 @@
 
 ## About The Project
 
-![hero image](https://github.com/HsuChe/matplotlib_challenge/blob/a25ee9a2ca6e4f6dd4c99a6167490a08182b8bba/Images/mouse-1708347_1920.jpg)
+![hero image](https://github.com/HsuChe/Project-1/blob/c77948626aef175d2735c6d4783f35d59d35fd1d/image/graduation-995042_1920.jpg)
 
 Graduating from high school can mean different things to different people as graduation criteria can often be different between schools and the standard can be opaque. The overall competitiveness of students graduating from Georgia district highschools can be standardized by their enrollment into college after graduation.
 
