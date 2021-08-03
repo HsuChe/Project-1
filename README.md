@@ -1,4 +1,4 @@
-<h3 align="center">Group Git Kats</h3>
+<h3 align="center">Group Git Cats</h3>
 
 <p align="center">
      College Enrollment from High School
