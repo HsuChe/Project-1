@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 <h3 align="center">Git Cats</h3>
-
-=======
 <h3 align="center">Group Git Kats</h3>
->>>>>>> 293677534aa8bd70b5a3de070bd7b643592a1884
 
 <p align="center">
      College Enrollment from High School
