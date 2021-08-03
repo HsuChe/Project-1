@@ -242,18 +242,18 @@ We can now analyze the graphs and export the images.
 
 # Conclusion
 
-# 1.
+# Conclusion 1
 
 ## Spend more funds on hiring qualified 9th grade teachers
 
-# 2.
+# Conclusion 2
 
 ## Emphasize importance of success in 9th grade courses
 
-# 3.
+# Conclusion 3
 
 ## Implement specific programs to aid homeless students
 
-# 4.
+# COnclusion 4
 
 ## Offer SAT/ACT prep to all students in schools
