@@ -240,7 +240,6 @@ put in the parameters for the graphs that we are generating.
 
 We can now analyze the graphs and export the images.
 
-# Conclusion
 
 # Conclusion 1
 
