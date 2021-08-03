@@ -40,7 +40,6 @@ Features of the independent variables datasets:
 * Download the graduation rate dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/Graduation_Rate_2019_Dec2nd_2019%20(3).csv)
 * Download the revenues and expenditure dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/Revenues_and_Expenditures_2018_DEC_10th_2018.csv)
 * Download the SAT performance dataset [HERE](https://github.com/HsuChe/Project-1/blob/487dcc90e1735e5e4d304ed3287454154ec8e67b/raw_data/SAT-score-data.csv)
-  *`<!-- GETTING STARTED -->`
 
 ## Processing the dependent variable
 
