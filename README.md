@@ -1,4 +1,4 @@
-<h3 align="center">Git Kats</h3>
+<h3 align="center">Git Cats</h3>
 
 
 <p align="center">
